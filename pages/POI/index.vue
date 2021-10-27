@@ -21,6 +21,7 @@
 			return {
 				address: '',
 				lists: [],
+				dy_poi_id: '',
 			}
 		},
 		onLoad() {
@@ -46,8 +47,29 @@
 					token,
 					address
 				}).then(res => {
-					if (res.code == 300) {
+					if (res.code == 200) {
 						this.lists = res.poi_list
+					} else {
+						toast(res.msg);
+					}
+				})
+			},
+			//获取抖音poi_id
+			async getPoiId(gaodei_poi_id) {
+				let {
+					userid,
+					openid,
+					token
+				} = getApp().globalData;
+				request('get_douyin_poi.php', {
+					userid,
+					openid,
+					token,
+					gaodei_poi_id
+				}).then(res => {
+					if (res.code == 200) {
+						this.dy_poi_id = res.poi_id;
+						return res.poi_id;
 					} else {
 						toast(res.msg);
 					}
@@ -58,7 +80,8 @@
 				let nowPage = pages[pages.length - 1]; //当前页页面实例
 				let prevPage = pages[pages.length - 2]; //上一页页面实例
 				prevPage.$vm.form.poi_address = item.name; //修改上一页data里面的tagIndex 参数值
-				prevPage.$vm.form.poi_id = item.id; //修改上一页data里面的tagIndex 参数值
+				let dy_poi_id = await this.getPoiId();
+				prevPage.$vm.form.poi_id = dy_poi_id ? this.dy_poi_id : ''; //修改上一页data里面的tagIndex 参数值
 				uni.navigateBack();
 
 			}
