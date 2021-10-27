@@ -460,7 +460,7 @@
 					mv.forEach(a => {
 						if (a) {
 							let ind = a.lastIndexOf('/');
-							mvNames.push(a.slice(57).split('.')[0]);
+							mvNames.push(a.slice(ind+1).split('.')[0]);
 						}
 					})
 					let mvStr = mvNames.join(',');

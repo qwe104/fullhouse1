@@ -6,7 +6,7 @@
 					<view class="name">{{item.act_name}}</view>
 					<view class="tip">{{item.active_desribe}}</view>
 				</view>
-				<view class="toDetail" @click="toDetail">查看数据详情</view>
+				<view class="toDetail" @click="toDetail(item)">查看数据详情</view>
 			</view>
 			<view class="middle">
 				<view>
@@ -88,7 +88,7 @@
 			},
 			toDetail(item) {
 				uni.navigateTo({
-					url: '/pages/activityDetail/index?actid=' + item.actid
+					url: '/pages/activityDetail/index?actid=' + item.id
 				})
 			}
 		},
@@ -119,7 +119,7 @@
 	.top .name {
 		font-size: 40rpx;
 		font-weight: 600;
-		margin-bottom: 5rpx;
+		margin-bottom: 15rpx;
 	}
 
 	.top .tip {

@@ -10,6 +10,10 @@
 					</view>
 				</view>
 			</view>
+			<view class="bindInfo">
+				<view class="bindTit">系统绑定</view>
+				<view class="bindItem"><text>绑定爆满系统</text><text class="btn-sm" @click='saoma'>扫码绑定</text></view>
+			</view>
 		</view>
 		<view class="footer">
 			<view class="toLook" @click="toLook">查看活动</view>
@@ -40,6 +44,26 @@
 				</view>
 			</view>
 		</view>
+		<view class="modal" v-if="showBind">
+			<view class="mask"></view>
+			<view class="content">
+				<view class="hd">请输入授权码</view>
+				<view class="bd">
+					<view class="inputGroup">
+						<!-- <view class="label">授权码</view> -->
+						<input class="input" type="text" v-model="code" placeholder="授权码"/>
+						<text class="iconfont icon-bianji" @click="toSM"></text>
+					</view>
+				</view>
+				<view class="fd">
+					<!-- <view @click="hideModal">取消</view> -->
+					<view @click="toBind" class="createStore" :class="{isActive:code}">绑定</view>
+				</view>
+				<view class="close" @click="hideModal">
+					<text class="iconfont icon-close"></text>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -54,8 +78,10 @@
 		data() {
 			return {
 				show: false,
+				showBind: false,
 				item: {},
 				isChoosed: false,
+				code:'',//授权码
 				storeInfo: {
 					logo: '',
 					describe: ''
@@ -67,7 +93,27 @@
 			this.item = JSON.parse(options.item);
 		},
 		methods: {
-			ckList(item) {},
+			getDetail() {
+				let {
+					userid,
+					token,
+					openid
+				} = getApp().globalData;
+				request('get_store_detail', {
+					userid,
+					openid,
+					token,
+					sid: this.item.id
+				}).then(res => {
+					if (res.code == 200) {
+						this.storeInfo.describe = res.describe;
+						this.storeInfo.logo = res.logo
+					} else {
+						toast(res.msg)
+					}
+
+				})
+			},
 			toLook() {
 				uni.navigateTo({
 					url: '/pages/activityList/index?sid=' + this.item.id
@@ -85,6 +131,7 @@
 			},
 			hideModal() {
 				this.show = false;
+				this.showBind = false
 			},
 			createStore() {
 				let {
@@ -118,8 +165,7 @@
 								toast(data.msg)
 								if (data.code == 200) {
 									this.show = false;
-									this.item.describe=describe;
-									// this.item.logo=
+									this.getDetail()
 								}
 							}
 						});
@@ -135,6 +181,7 @@
 							toast(res.msg)
 							if (res.code == 200) {
 								this.show = false
+								this.getDetail()
 							}
 						})
 
@@ -153,6 +200,38 @@
 						that.isChoosed = true;
 					}
 				});
+			},
+			saoma() {
+				this.showBind = true;
+				this.code="";
+			},
+			toSM(){
+				uni.scanCode({
+				    success: function (res) {
+				        console.log('条码类型：' + res.scanType);
+				        console.log('条码内容：' + res.result);
+						this.code=res.result;
+				    }
+				});
+			},
+			// 绑定商户
+			toBind() {
+				let {
+					userid,
+					token,
+					openid
+				} = getApp().globalData;
+				request('bind_store.php', {
+					userid,
+					token,
+					openid,
+					code:this.code
+				}).then(res => {
+					toast(res.msg);
+					if (res.code == 200) {
+						this.showBind = false;
+					}
+				})
 			}
 
 		}
@@ -197,6 +276,33 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
+	}
+
+	.bindInfo {
+		margin-top: 30rpx;
+		padding: 30rpx;
+		border-radius: 5px;
+		background-color: #fff;
+	}
+
+	.bindInfo .bindTit {
+		font-size: 32rpx;
+		padding-bottom: 30rpx;
+		font-weight: 600;
+	}
+
+	.bindItem {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		font-size: 32rpx;
+	}
+
+	.btn-sm {
+		padding: 5px 10px;
+		border-radius: 35rpx;
+		background-color: #EEFBF6;
+		color: #6DB08F;
 	}
 
 	.info .name {
