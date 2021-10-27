@@ -3,11 +3,15 @@
 		<view class="htz-image-upload-Item" v-for="(item,index) in uploadLists" :key="index">
 			<view class="htz-image-upload-Item-video">
 				<video :disabled="false" :controls="false" :src="item" v-if="item">
-					<cover-view class="htz-image-upload-Item-video-fixed" @click="previewVideo(item)" v-if="item">
-					</cover-view>
+					<!-- <cover-view class="htz-image-upload-Item-video-fixed" @click="previewVideo(item)" v-if="item">
+					</cover-view> -->
+					<view class="htz-image-upload-Item-video-fixed" @click="previewVideo(item)" v-if="item">
+					</view>
 
-					<cover-view class="htz-image-upload-Item-del-cover" v-if="remove && previewVideoSrc==''&&item"
-						@click="imgDel(index)">×</cover-view>
+					<!-- 	<cover-view class="htz-image-upload-Item-del-cover" v-if="remove && previewVideoSrc==''&&item"
+						@click="imgDel(index)">×</cover-view> -->
+					<view class="htz-image-upload-Item-del-cover" v-if="remove && previewVideoSrc==''&&item"
+						@click="imgDel(index)">×</view>
 
 				</video>
 				<view class=" htz-image-upload-Item-add" v-if="!item">
@@ -69,6 +73,9 @@
 </style>
 
 <script>
+	import {
+		toast
+	} from '@/util/util.js'
 	export default {
 		name: 'htz-image-upload',
 		props: {
@@ -272,6 +279,10 @@
 					maxDuration: this.maxDuration,
 					success: (res) => {
 						console.log('videoAdd', res)
+						if (res.duration > 60) {
+							toast('视频超过60s');
+							return;
+						}
 						console.log(res.tempFilePath)
 						this.chooseSuccessMethod([res.tempFilePath], 1)
 						//this.imgUpload([res.tempFilePath]);
@@ -628,7 +639,7 @@
 
 	.htz-image-upload-Item-video {
 		width: 100%;
-		height: 100%;
+		height: 130rpx;
 		border-radius: 10rpx;
 		position: relative;
 		display: flex;
@@ -641,7 +652,8 @@
 		left: 0;
 		bottom: 0;
 		width: 100%;
-		height: 100%;
+		/* height: 100%; */
+		height: 130rpx;
 		border-radius: 10rpx;
 		z-index: 996;
 
@@ -649,7 +661,8 @@
 
 	.htz-image-upload-Item video {
 		width: 100%;
-		height: 100%;
+		/* height: 100%; */
+		height: 130rpx;
 		border-radius: 20rpx;
 
 	}
