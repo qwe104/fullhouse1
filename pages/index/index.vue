@@ -39,6 +39,21 @@
 				</view>
 			</view>
 		</view>
+		<view class="modal modalBottom" v-if="showBottom">
+			<view class="mask"></view>
+			<view class="content1">
+				<view class="hd1">更多功能</view>
+				<view class="bd1">
+					<view class="bd_item" @click="tymd">
+						<text class="iconfont icon-zhoubianhuodongtiyandianxinxi" style="margin-right:30rpx;"></text>
+						<text>体验门店</text>
+					</view>
+				</view>
+				<view class="close1" @click="hideModal">
+					X
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -57,7 +72,8 @@
 				storeInfo: {
 					logo: '',
 					describe: ''
-				}
+				},
+				showBottom: false,
 			}
 		},
 		onLoad() {
@@ -89,7 +105,7 @@
 				})
 			},
 			toMore() {
-
+				this.showBottom = true;
 			},
 			addStore() {
 				this.show = true;
@@ -148,6 +164,13 @@
 						console.log(JSON.stringify(res.tempFilePaths));
 					}
 				});
+			},
+			//点击弹框体验门店
+			tymd() {
+				this.showBottom = false;
+				uni.navigateTo({
+					url: '/pages/storeDetail/index'
+				})
 			}
 		}
 	}
@@ -358,5 +381,34 @@
 	.isActive {
 		background-color: #426FE7;
 		color: #fff;
+	}
+
+	.modalBottom .content1 {
+		bottom: 0;
+		width: 100%;
+		background: #FFFFFF;
+		border-radius: 10px 10px 0 0;
+
+	}
+
+	.modalBottom .hd1 {
+		padding: 30rpx;
+		text-align: center;
+		font-size: 32rpx;
+		font-weight: 500;
+	}
+
+	.bd1 .bd_item {
+		border-bottom: 1px solid #ddd;
+		padding: 30rpx;
+		display: flex;
+		align-items: center;
+	}
+
+	.close1 {
+		position: absolute;
+		right: 30rpx;
+		top: 30rpx;
+
 	}
 </style>
