@@ -1,15 +1,20 @@
 @font-face {
   font-family: 'iconfont';  /* Project id 2882771 */
-  src: url('//at.alicdn.com/t/font_2882771_0qc9tt4a6m8d.woff2?t=1635123252511') format('woff2'),
-       url('//at.alicdn.com/t/font_2882771_0qc9tt4a6m8d.woff?t=1635123252511') format('woff'),
-       url('//at.alicdn.com/t/font_2882771_0qc9tt4a6m8d.ttf?t=1635123252511') format('truetype');
+  src: url('//at.alicdn.com/t/font_2882771_j7yxv8irgs.woff2?t=1635405192550') format('woff2'),
+       url('//at.alicdn.com/t/font_2882771_j7yxv8irgs.woff?t=1635405192550') format('woff'),
+       url('//at.alicdn.com/t/font_2882771_j7yxv8irgs.ttf?t=1635405192550') format('truetype');
 }
+
 .iconfont {
   font-family: "iconfont" !important;
   font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-saoma:before {
+  content: "\e749";
 }
 
 .icon-bianji:before {
