@@ -176,16 +176,16 @@
 								openid,
 								token
 							} = getApp().globalData;
-							request('get_activity.php', {
+							request('del_douyin_activity.php', {
 								userid,
 								openid,
 								token,
-								id: item.id
+								sid:that.sid,
+								actid: item.id
 							}).then((res) => {
+								toast(res.msg)
 								if (res.code == 200) {
 									that.getLists()
-								} else {
-									toast(res.msg)
 								}
 							})
 						} else if (res.cancel) {
@@ -273,7 +273,7 @@
 	}
 
 	.bottom>view {
-		flex: 0 0 25%;
+		flex: 0 0 33.33%;
 	}
 
 	.bottom {

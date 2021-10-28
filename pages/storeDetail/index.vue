@@ -1,10 +1,10 @@
 <template>
 	<view class="home">
 		<view class="lists">
-			<view class="list" @click="ckList(item)">
-				<image class="img" :src="item.logo"></image>
+			<view class="list">
+				<image class="img" :src="storeInfo.logo"></image>
 				<view class="info">
-					<text class="name">{{item.describe}}</text>
+					<text class="name">{{storeInfo.describe}}</text>
 					<view class="tip" @click="edit">
 						<text class="iconfont icon-bianji" style="margin-right:5px"></text>编辑资料
 					</view>
@@ -12,7 +12,14 @@
 			</view>
 			<view class="bindInfo">
 				<view class="bindTit">系统绑定</view>
-				<view class="bindItem"><text>绑定爆满系统</text><text class="btn-sm" @click='saoma'>扫码绑定</text></view>
+				<view class="bindItem" v-if="storeInfo.is_bind==0">
+					<text>绑定坐满系统</text>
+					<text class="btn-sm" @click='saoma'>扫码绑定</text>
+				</view>
+				<view class="bindItem" v-if="storeInfo.is_bind==1">
+					<text>授权码</text>
+					<text style="font-size:30rpx;">{{storeInfo.auth_code}}</text>
+				</view>
 			</view>
 		</view>
 		<view class="footer">
@@ -51,8 +58,8 @@
 				<view class="bd">
 					<view class="inputGroup">
 						<!-- <view class="label">授权码</view> -->
-						<input class="input" type="text" v-model="code" placeholder="授权码"/>
-						<text class="iconfont icon-bianji" @click="toSM"></text>
+						<input class="input" type="text" v-model="code" placeholder="授权码" />
+						<text class="iconfont icon-saoma" style="font-size:60rpx;" @click="toSM"></text>
 					</view>
 				</view>
 				<view class="fd">
@@ -79,9 +86,9 @@
 			return {
 				show: false,
 				showBind: false,
-				item: {},
+				sid: {},
 				isChoosed: false,
-				code:'',//授权码
+				code: '', //授权码
 				storeInfo: {
 					logo: '',
 					describe: ''
@@ -89,8 +96,11 @@
 			}
 		},
 		onLoad(options) {
-			console.log(options);
-			this.item = JSON.parse(options.item);
+			this.sid = options.sid;
+			this.isTY=options.isTY||''
+		},
+		onShow() {
+			this.getDetail();
 		},
 		methods: {
 			getDetail() {
@@ -99,15 +109,14 @@
 					token,
 					openid
 				} = getApp().globalData;
-				request('get_store_detail', {
+				request('get_store_detail.php', {
 					userid,
 					openid,
 					token,
-					sid: this.item.id
+					sid: this.sid
 				}).then(res => {
 					if (res.code == 200) {
-						this.storeInfo.describe = res.describe;
-						this.storeInfo.logo = res.logo
+						this.storeInfo = res
 					} else {
 						toast(res.msg)
 					}
@@ -115,13 +124,21 @@
 				})
 			},
 			toLook() {
+				if (this.storeInfo.is_bind == 0) {
+					toast('还未绑定系统,请先绑定');
+					return
+				}
 				uni.navigateTo({
-					url: '/pages/activityList/index?sid=' + this.item.id
+					url: '/pages/activityList/index?sid=' + this.sid
 				})
 			},
 			toCreate() {
+				if (this.storeInfo.is_bind == 0) {
+					toast('还未绑定系统,请先绑定');
+					return
+				}
 				uni.navigateTo({
-					url: '/pages/createActivity/index?sid=' + this.item.id + "&actid=0"
+					url: '/pages/createActivity/index?sid=' + this.sid + "&actid=0"
 				})
 			},
 			edit() {
@@ -158,7 +175,7 @@
 								openid,
 								token,
 								describe,
-								id: this.item.id
+								id: this.sid
 							},
 							success: (res) => {
 								let data = JSON.parse(res.data.replace(/\ufeff/g, ''))
@@ -175,7 +192,7 @@
 							openid,
 							token,
 							describe,
-							id: this.item.id,
+							id: this.sid,
 							logo: this.item.logo,
 						}).then((res) => {
 							toast(res.msg)
@@ -203,15 +220,15 @@
 			},
 			saoma() {
 				this.showBind = true;
-				this.code="";
+				this.code = "";
 			},
-			toSM(){
+			toSM() {
 				uni.scanCode({
-				    success: function (res) {
-				        console.log('条码类型：' + res.scanType);
-				        console.log('条码内容：' + res.result);
-						this.code=res.result;
-				    }
+					success: function(res) {
+						console.log('条码类型：' + res.scanType);
+						console.log('条码内容：' + res.result);
+						this.code = res.result;
+					}
 				});
 			},
 			// 绑定商户
@@ -225,11 +242,13 @@
 					userid,
 					token,
 					openid,
-					code:this.code
+					sid:this.sid,
+					code: this.code
 				}).then(res => {
 					toast(res.msg);
 					if (res.code == 200) {
 						this.showBind = false;
+						this.getDetail()
 					}
 				})
 			}

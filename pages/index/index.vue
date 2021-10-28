@@ -45,7 +45,7 @@
 				<view class="hd1">更多功能</view>
 				<view class="bd1">
 					<view class="bd_item" @click="tymd">
-						<text class="iconfont icon-zhoubianhuodongtiyandianxinxi" style="margin-right:30rpx;"></text>
+						<text class="iconfont icon-zhoubianhuodongtiyandianxinxi" style="margin-right:30rpx;font-size:40rpx;color:#23BF7A"></text>
 						<text>体验门店</text>
 					</view>
 				</view>
@@ -101,7 +101,7 @@
 			},
 			ckList(item) {
 				uni.navigateTo({
-					url: '/pages/storeDetail/index?item=' + JSON.stringify(item)
+					url: '/pages/storeDetail/index?sid=' + item.id
 				})
 			},
 			toMore() {
@@ -151,6 +151,7 @@
 			},
 			hideModal() {
 				this.show = false;
+				this.showBottom=false
 			},
 			chooseImg() {
 				var that = this;
@@ -169,7 +170,7 @@
 			tymd() {
 				this.showBottom = false;
 				uni.navigateTo({
-					url: '/pages/storeDetail/index'
+					url: '/pages/storeDetail/index?isTY=1&sid=1'
 				})
 			}
 		}
@@ -384,25 +385,28 @@
 	}
 
 	.modalBottom .content1 {
+		position:absolute;
 		bottom: 0;
 		width: 100%;
 		background: #FFFFFF;
 		border-radius: 10px 10px 0 0;
+		padding-bottom:40rpx;
 
 	}
 
 	.modalBottom .hd1 {
 		padding: 30rpx;
 		text-align: center;
-		font-size: 32rpx;
+		font-size: 40rpx;
 		font-weight: 500;
 	}
 
 	.bd1 .bd_item {
 		border-bottom: 1px solid #ddd;
-		padding: 30rpx;
+		padding: 40rpx;
 		display: flex;
 		align-items: center;
+		font-size:40rpx
 	}
 
 	.close1 {
