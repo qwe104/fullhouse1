@@ -162,7 +162,7 @@
 			edit(item) {
 				uni.navigateTo({
 					url: '/pages/createActivity/index?actid=' + item.id + '&sid=' + this.sid + '&item=' + JSON
-						.stringify(item)+"&isTY"+this.isTY
+						.stringify(item)+"&isTY="+this.isTY
 				})
 			},
 			//删除活动
