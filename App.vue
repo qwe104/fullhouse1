@@ -10,7 +10,8 @@
 			appid: 'wx76362771373d113a',
 			openid: '',
 			token: '',
-			userid: ''
+			userid: '',
+			money:0,
 		},
 		onLaunch: function() {
 			console.log('App Launch')
@@ -26,6 +27,7 @@
 							this.globalData.openid = res1.openid;
 							this.globalData.token = res1.token;
 							this.globalData.userid = res1.userid;
+							this.globalData.money = res1.money;
 							this.$isResolve()
 						} else {
 							toast(res1.msg)

@@ -44,6 +44,10 @@
 			<view class="content1">
 				<view class="hd1">更多功能</view>
 				<view class="bd1">
+					<view class="bd_item" @click="toBill">
+						<text class="iconfont icon-zhoubianhuodongtiyandianxinxi" style="margin-right:30rpx;font-size:40rpx;color:#23BF7A"></text>
+						<text>我的订单</text>
+					</view>
 					<view class="bd_item" @click="tymd">
 						<text class="iconfont icon-zhoubianhuodongtiyandianxinxi" style="margin-right:30rpx;font-size:40rpx;color:#23BF7A"></text>
 						<text>体验门店</text>
@@ -165,6 +169,12 @@
 						console.log(JSON.stringify(res.tempFilePaths));
 					}
 				});
+			},
+			//点击我的订单
+			toBill(){
+				uni.navigateTo({
+					url:'/pages/myBill/index'
+				})
 			},
 			//点击弹框体验门店
 			tymd() {

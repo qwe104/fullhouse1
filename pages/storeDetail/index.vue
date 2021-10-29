@@ -14,7 +14,11 @@
 				<view class="bindTit">系统绑定</view>
 				<view class="bindItem" v-if="storeInfo.is_bind==0">
 					<text>绑定坐满系统</text>
-					<text class="btn-sm" @click='saoma'>扫码绑定</text>
+					<view>
+						<text class="btn-pay" @click='toPay'>支付开通</text>
+						<text class="btn-sm" @click='saoma'>扫码绑定</text>
+					</view>
+
 				</view>
 				<view class="bindItem" v-if="storeInfo.is_bind==1">
 					<text>授权码</text>
@@ -89,7 +93,7 @@
 				sid: {},
 				isChoosed: false,
 				code: '', //授权码
-				isTY:'',
+				isTY: '',
 				storeInfo: {
 					logo: '',
 					describe: ''
@@ -98,7 +102,7 @@
 		},
 		onLoad(options) {
 			this.sid = options.sid;
-			this.isTY=options.isTY||''
+			this.isTY = options.isTY || ''
 		},
 		onShow() {
 			this.getDetail();
@@ -130,7 +134,7 @@
 					return
 				}
 				uni.navigateTo({
-					url: '/pages/activityList/index?sid=' + this.sid+"&isTY="+this.isTY
+					url: '/pages/activityList/index?sid=' + this.sid + "&isTY=" + this.isTY
 				})
 			},
 			toCreate() {
@@ -223,6 +227,42 @@
 				this.showBind = true;
 				this.code = "";
 			},
+			//支付开通
+			toPay() {
+				var that=this;
+				let {
+					userid,
+					token,
+					openid,
+					appid,
+					money
+				} = getApp().globalData;
+				request('pay.php', {
+					appid,
+					userid,
+					token,
+					openid,
+					sid: this.sid,
+					money: money
+				}).then(res => {
+					if (res.code == 200) {
+						wx.requestPayment({
+							"timeStamp": res.prepay_info.timeStamp,
+							"nonceStr": res.prepay_info.nonceStr,
+							"package": res.prepay_info.package,
+							"signType": res.prepay_info.signType,
+							"paySign": res.prepay_info.paySign,
+							"success": function(res) {
+								that.getDetail()
+							},
+							"fail": function(res) {},
+							"complete": function(res) {}
+						})
+					} else {
+						toast(res.msg)
+					}
+				})
+			},
 			toSM() {
 				uni.scanCode({
 					success: function(res) {
@@ -243,7 +283,7 @@
 					userid,
 					token,
 					openid,
-					sid:this.sid,
+					sid: this.sid,
 					code: this.code
 				}).then(res => {
 					toast(res.msg);
@@ -325,6 +365,14 @@
 		color: #6DB08F;
 	}
 
+	.btn-pay {
+		padding: 5px 10px;
+		border-radius: 35rpx;
+		background-color: rgba(28, 214, 108, .4);
+		color: #fff;
+		margin-right: 5px;
+	}
+
 	.info .name {
 		font-size: 40rpx;
 		font-weight: 600;
@@ -365,7 +413,7 @@
 
 	.toCreate {
 		background-color: #52B752;
-		margin-left:30rpx;
+		margin-left: 30rpx;
 	}
 
 	.modal {

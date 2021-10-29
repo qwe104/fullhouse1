@@ -472,7 +472,7 @@
 					})
 					let mvStr = mvNames.join(',');
 					data.mv = mvStr;
-					data.mv100 = mv100[0];
+					data.mv100 = mv100[0]?mv100[0].slice(mv100[0].lastIndexOf('/') + 1).split('.')[0]:'';
 					data.act_name = act_name;
 					data.card_name = card_name;
 					data.last_time = last_time;

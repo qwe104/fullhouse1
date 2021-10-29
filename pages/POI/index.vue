@@ -5,6 +5,7 @@
 			<view class="list" v-for="(item,index) in lists" :key="index" @click="back(item)">{{
 				item.name
 			}}</view>
+			<view class="empty" v-if="!lists||lists.length==0">暂无数据</view>
 		</view>
 	</view>
 </template>
@@ -25,7 +26,7 @@
 			}
 		},
 		onLoad() {
-			this.getLists(this.address);
+			// this.getLists(this.address);
 		},
 		methods: {
 			getVal(e) {
@@ -100,15 +101,23 @@
 
 	.addr .input {
 		height: 88rpx;
-		padding: 15rpx;
+		padding:0 15rpx;
 		border-radius: 8px;
 		background-color: #F6F7F7;
 		fonts-size: 24rpx;
 	}
 
 	.lists {
-		height: calc(100vh - 88rpx);
+		height: calc(100vh - 128rpx);
 		overflow: auto;
+	}
+	.empty{
+		height:100%;
+		align-items:center;
+		justify-content: center;
+		display: flex;
+		font-size:32rpx;
+		color:#ddd
 	}
 
 	.list {
