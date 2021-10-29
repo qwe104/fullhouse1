@@ -173,7 +173,7 @@
 
 			</view>
 		</view>
-		<view class="save" @click="save">保存</view>
+		<view class="save" @click="save">{{is_TY?'返回':'保存'}}</view>
 	</view>
 </template>
 
@@ -190,6 +190,7 @@
 			return {
 				videos: ['', '', '', '', ''],
 				sid: '',
+				is_TY: '',
 				actid: '',
 				// '不限领取',
 				lingquRang: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
@@ -221,6 +222,7 @@
 			}
 		},
 		onLoad(options) {
+			this.is_TY = options.is_TY || '';
 			if (options.actid != 0) {
 				uni.setNavigationBarTitle({
 					title: '编辑活动'
@@ -281,6 +283,7 @@
 			}
 			this.sid = options.sid;
 			this.actid = options.actid;
+
 			let {
 				openid,
 				userid,
@@ -421,6 +424,10 @@
 			},
 			//点击保存
 			save() {
+				if (this.is_TY) {
+					uni.navigateBack();
+					return;
+				}
 				let {
 					openid,
 					userid,
@@ -460,7 +467,7 @@
 					mv.forEach(a => {
 						if (a) {
 							let ind = a.lastIndexOf('/');
-							mvNames.push(a.slice(ind+1).split('.')[0]);
+							mvNames.push(a.slice(ind + 1).split('.')[0]);
 						}
 					})
 					let mvStr = mvNames.join(',');

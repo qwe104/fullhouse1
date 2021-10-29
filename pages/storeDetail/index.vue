@@ -24,7 +24,7 @@
 		</view>
 		<view class="footer">
 			<view class="toLook" @click="toLook">查看活动</view>
-			<view class="toCreate" @click="toCreate">创建活动</view>
+			<view class="toCreate" @click="toCreate" v-if="!storeInfo.is_TY">创建活动</view>
 		</view>
 		<view class="modal" v-if="show">
 			<view class="mask"></view>
@@ -89,6 +89,7 @@
 				sid: {},
 				isChoosed: false,
 				code: '', //授权码
+				isTY:'',
 				storeInfo: {
 					logo: '',
 					describe: ''
@@ -129,7 +130,7 @@
 					return
 				}
 				uni.navigateTo({
-					url: '/pages/activityList/index?sid=' + this.sid
+					url: '/pages/activityList/index?sid=' + this.sid+"&is_TY="+this.is_TY
 				})
 			},
 			toCreate() {
@@ -349,7 +350,7 @@
 
 	.footer view {
 		height: 100rpx;
-		flex: 0 0 48%;
+		flex: 1;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -364,6 +365,7 @@
 
 	.toCreate {
 		background-color: #52B752;
+		margin-left:30rpx;
 	}
 
 	.modal {
