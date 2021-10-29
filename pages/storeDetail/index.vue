@@ -24,7 +24,7 @@
 		</view>
 		<view class="footer">
 			<view class="toLook" @click="toLook">查看活动</view>
-			<view class="toCreate" @click="toCreate" v-if="storeInfo.isTY">创建活动</view>
+			<view class="toCreate" @click="toCreate" v-if="!storeInfo.isTY">创建活动</view>
 		</view>
 		<view class="modal" v-if="show">
 			<view class="mask"></view>
