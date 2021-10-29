@@ -55,12 +55,12 @@
 			return {
 				lists: [],
 				sid: '',
-				is_TY:'',
+				isTY:'',
 			}
 		},
 		onLoad(options) {
 			this.sid = options.sid;
-			this.is_TY=options.is_TY||''
+			this.isTY=options.isTY||''
 			// this.getLists();
 		},
 		onShow() {
@@ -162,7 +162,7 @@
 			edit(item) {
 				uni.navigateTo({
 					url: '/pages/createActivity/index?actid=' + item.id + '&sid=' + this.sid + '&item=' + JSON
-						.stringify(item)+"&is_TY"+this.is_TY
+						.stringify(item)+"&isTY"+this.isTY
 				})
 			},
 			//删除活动
