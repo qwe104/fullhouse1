@@ -49,7 +49,7 @@
 						<text>我的订单</text>
 					</view>
 					<view class="bd_item" @click="tymd">
-						<text class="iconfont icon-zhoubianhuodongtiyandianxinxi" style="margin-right:30rpx;font-size:40rpx;color:#23BF7A"></text>
+						<text class="iconfont icon-my_bill" style="margin-right:30rpx;font-size:40rpx;color:rgb(255, 145, 40)"></text>
 						<text>体验门店</text>
 					</view>
 				</view>

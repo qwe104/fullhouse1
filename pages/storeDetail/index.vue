@@ -11,7 +11,10 @@
 				</view>
 			</view>
 			<view class="bindInfo">
-				<view class="bindTit">系统绑定</view>
+				<view class="bindTit">
+					<text>系统绑定</text>
+					<text class="iconfont icon-fresh" style="font-size:40rpx;color:#F40" @click="fresh"></text>
+				</view>
 				<view class="bindItem" v-if="storeInfo.is_bind==0">
 					<text>绑定坐满系统</text>
 					<view>
@@ -227,6 +230,9 @@
 				this.showBind = true;
 				this.code = "";
 			},
+			fresh(){
+				this.getDetail();
+			},
 			//支付开通
 			toPay() {
 				var that=this;
@@ -346,6 +352,9 @@
 	}
 
 	.bindInfo .bindTit {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 		font-size: 32rpx;
 		padding-bottom: 30rpx;
 		font-weight: 600;

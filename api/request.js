@@ -6,6 +6,9 @@ let baseUrl="https://dc.bilalipay.com/douyin/web/";
 //封装请求
 // noLoad true:不加载loading ;false :加载loading
 function request(url, data, method, noLoad) {
+	if (!noLoad) {
+		loading('加载中')
+	};
 	return new Promise((resolve, reject) => {
 		uni.request({
 			url: baseUrl + url,

@@ -47,7 +47,7 @@
 					openid,
 					token,
 					address
-				}).then(res => {
+				},'post',true).then(res => {
 					if (res.code == 200) {
 						this.lists = res.poi_list
 					} else {
