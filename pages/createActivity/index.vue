@@ -206,8 +206,8 @@
 					act_name: '',
 					card_name: '',
 					last_time: '',
-					lingqu_num: '',
-					share_num: '',
+					lingqu_num: 1,
+					share_num: 1,
 					poi_status: 1,
 					poi_address: '',
 					poi_id: '',
@@ -264,12 +264,12 @@
 				nums.sort(function(a, b) {
 					return a - b;
 				});
-				console.log(nums)
+				// console.log(nums)
 				var result = [];
 				for (var i = 0, len = nums.length; i < len; i += 5) {
 					result.push(nums.slice(i, i + 5));
 				};
-				console.log(result);
+				// console.log(result);
 				let videos = [];
 				result.forEach(v => {
 					let video = [];
@@ -279,7 +279,7 @@
 					videos.push(video);
 				});
 				this.form.videos = videos;
-				console.log(videos);
+				// console.log(videos);
 			}
 			this.sid = options.sid;
 			this.actid = options.actid;
@@ -304,13 +304,13 @@
 				if (data.code == 200) {
 					let ind = item.indexOf('');
 					this.$set(item, ind, data.file_url)
-					console.log(pInd)
+					// console.log(pInd)
 					this.form.videos.splice(pInd, 1, item);
-					console.log(this.form.videos)
+					// console.log(this.form.videos)
 				}
 			},
 			Delete(e) {
-				console.log('ceshiImgDelete', e)
+				// console.log('ceshiImgDelete', e)
 				let del_mv = e.del.slice(e.del.lastIndexOf('/') + 1).split('.')[0];
 				let {
 					openid,
@@ -339,7 +339,7 @@
 				}
 			},
 			Delete1(e) {
-				console.log('ceshiImgDelete', e)
+				// console.log('ceshiImgDelete', e)
 				let del_mv = e.del.slice(e.del.lastIndexOf('/') + 1).split('.')[0];
 				let {
 					openid,
@@ -399,7 +399,6 @@
 				} = e.detail;
 				this.shareInd = value;
 				this.form.share_num = this.shareRang[value];
-				console.log(this.form.share_num)
 			},
 			//添加一组场景
 			addScene() {
