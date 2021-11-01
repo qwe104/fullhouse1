@@ -150,8 +150,6 @@
 				})
 			},
 			edit() {
-				this.storeInfo.describe = this.item.describe;
-				this.storeInfo.logo = this.item.logo;
 				this.show = true;
 			},
 			hideModal() {
@@ -377,7 +375,7 @@
 	.btn-pay {
 		padding: 5px 10px;
 		border-radius: 35rpx;
-		background-color: rgba(28, 214, 108, .4);
+		background-color:#52B752;
 		color: #fff;
 		margin-right: 5px;
 	}
