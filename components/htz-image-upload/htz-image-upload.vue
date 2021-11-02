@@ -237,6 +237,7 @@
 			chooseFile(item, index) {
 				this.curInd = index;
 				if (this.disabled) {
+					toast('视频片段和视频成品只能二选一')
 					return false;
 				}
 				switch (this.mediaTypeData.indexOf(this.mediaType)) {

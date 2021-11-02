@@ -99,8 +99,9 @@
 								</view>
 							</view>
 							<view class="videoBox">
-								<htzImageUpload :max="19" v-model="form.videos[index]" mediaType="video" :chooseNum="9"
-									:sourceType="['album']" :compress="false" :quality="80"
+								<htzImageUpload :max="19" :disabled="form.mv100[0]" v-model="form.videos[index]"
+									mediaType="video" :chooseNum="1" :sourceType="['album']" :compress="false"
+									:quality="80"
 									:formData="{actid:actid,openid:logInfo.openid,userid:logInfo.userid,token:logInfo.token,sid:sid}"
 									:remove="true" @uploadSuccess="uploadSuccess(arguments)" @imgDelete="Delete"
 									@uploadFail="uploadFail"
@@ -119,7 +120,7 @@
 				<view class="allVideo">
 					<view style="margin-bottom:40rpx;">
 						<text class="title">视频成品</text>
-						<text class="tip">非必填，如果您希望自己剪辑视频，可在此上传视频成品</text>
+						<text class="tip">视频片段和视频成品二选一</text>
 					</view>
 					<htzImageUpload :max="1" :disabled="hasVideo" :value="form.mv100" mediaType="video" :chooseNum="1"
 						:sourceType="['album']" :compress="false" :quality="80" :name="'mv100'"
@@ -188,7 +189,6 @@
 	export default {
 		data() {
 			return {
-				videos: ['', '', '', '', ''],
 				sid: '',
 				isTY: '',
 				actid: '',
@@ -218,7 +218,8 @@
 						['', '', '', '', '']
 					],
 					mv100: [''],
-				}
+				},
+				hasVideo: false,
 			}
 		},
 		onLoad(options) {
@@ -230,7 +231,7 @@
 			}
 			if (options.item) {
 				let item = JSON.parse(options.item);
-				this.form = {
+				let form = {
 					act_name: item.act_name,
 					card_name: item.card_name,
 					last_time: item.last_time,
@@ -278,9 +279,11 @@
 					})
 					videos.push(video);
 				});
-				this.form.videos = videos;
+				form.videos = videos;
 				// console.log(videos);
+				this.form = form;
 			}
+
 			this.sid = options.sid;
 			this.actid = options.actid;
 
@@ -326,6 +329,7 @@
 					del_mv,
 				}).then(res => {
 					toast(res.msg);
+					this.hasVideo = !this.isEmpty(this.form.videos);
 				})
 
 			},
@@ -355,6 +359,7 @@
 					del_mv,
 				}).then(res => {
 					toast(res.msg);
+					this.$set(this.form.mv100, 0, '')
 				})
 			},
 			uploadFail1(err) { //上传失败
@@ -471,7 +476,7 @@
 					})
 					let mvStr = mvNames.join(',');
 					data.mv = mvStr;
-					data.mv100 = mv100[0]?mv100[0].slice(mv100[0].lastIndexOf('/') + 1).split('.')[0]:'';
+					data.mv100 = mv100[0] ? mv100[0].slice(mv100[0].lastIndexOf('/') + 1).split('.')[0] : '';
 					data.act_name = act_name;
 					data.card_name = card_name;
 					data.last_time = last_time;
@@ -518,10 +523,17 @@
 			endDate() {
 				return this.getDate('end');
 			},
-			hasVideo() {
-				return !this.isEmpty(this.form.videos)
-			}
 		},
+		watch: {
+			'form.videos': {
+				deep: true,
+				immediate: true,
+				handler(val) {
+					console.log(val)
+					this.hasVideo = !this.isEmpty(val);
+				}
+			}
+		}
 	}
 </script>
 
