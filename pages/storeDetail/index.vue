@@ -5,7 +5,7 @@
 				<image class="img" :src="storeInfo.logo"></image>
 				<view class="info">
 					<text class="name">{{storeInfo.describe}}</text>
-					<view class="tip" @click="edit">
+					<view class="tip" @click="edit" v-if="!isTY">
 						<text class="iconfont icon-bianji" style="margin-right:5px"></text>编辑资料
 					</view>
 				</view>
@@ -199,7 +199,7 @@
 							token,
 							describe,
 							id: this.sid,
-							logo: this.item.logo,
+							logo: logo,
 						}).then((res) => {
 							toast(res.msg)
 							if (res.code == 200) {
@@ -228,12 +228,12 @@
 				this.showBind = true;
 				this.code = "";
 			},
-			fresh(){
+			fresh() {
 				this.getDetail();
 			},
 			//支付开通
 			toPay() {
-				var that=this;
+				var that = this;
 				let {
 					userid,
 					token,
@@ -375,7 +375,7 @@
 	.btn-pay {
 		padding: 5px 10px;
 		border-radius: 35rpx;
-		background-color:#52B752;
+		background-color: #52B752;
 		color: #fff;
 		margin-right: 5px;
 	}

@@ -1,12 +1,18 @@
 <template>
 	<view class="home">
 		<view class="lists">
-			<view class="list" @click="ckList(item)" v-for="(item,index) in lists" :key="index">
-				<image class="img" :src="item.logo"></image>
-				<view class="info">
-					<text class="name">{{item.describe}}</text>
-					<text class="tip">{{item.create_time}}</text>
+			<template v-for="(item,index) in lists" >
+				<view class="list" @click="ckList(item)" v-if="lists.length>0" :key="index">
+					<image class="img" :src="item.logo"></image>
+					<view class="info">
+						<text class="name">{{item.describe}}</text>
+						<text class="tip">{{item.create_time}}</text>
+					</view>
 				</view>
+			</template>
+
+			<view class="empty" v-if="lists.length==0">
+				<image :src="bgurl" style="width:100%;height:100%"></image>
 			</view>
 		</view>
 		<view class="footer">
@@ -45,11 +51,13 @@
 				<view class="hd1">更多功能</view>
 				<view class="bd1">
 					<view class="bd_item" @click="toBill">
-						<text class="iconfont icon-zhoubianhuodongtiyandianxinxi" style="margin-right:30rpx;font-size:40rpx;color:#23BF7A"></text>
+						<text class="iconfont icon-zhoubianhuodongtiyandianxinxi"
+							style="margin-right:30rpx;font-size:40rpx;color:#23BF7A"></text>
 						<text>我的订单</text>
 					</view>
 					<view class="bd_item" @click="tymd">
-						<text class="iconfont icon-my_bill" style="margin-right:30rpx;font-size:40rpx;color:rgb(255, 145, 40)"></text>
+						<text class="iconfont icon-my_bill"
+							style="margin-right:30rpx;font-size:40rpx;color:rgb(255, 145, 40)"></text>
 						<text>体验门店</text>
 					</view>
 				</view>
@@ -78,9 +86,11 @@
 					describe: ''
 				},
 				showBottom: false,
+				bgurl: ''
 			}
 		},
 		onLoad() {
+			this.bgurl = getApp().globalData.bgurl;
 			this.getLists()
 		},
 		methods: {
@@ -155,7 +165,7 @@
 			},
 			hideModal() {
 				this.show = false;
-				this.showBottom=false
+				this.showBottom = false
 			},
 			chooseImg() {
 				var that = this;
@@ -171,9 +181,9 @@
 				});
 			},
 			//点击我的订单
-			toBill(){
+			toBill() {
 				uni.navigateTo({
-					url:'/pages/myBill/index'
+					url: '/pages/myBill/index'
 				})
 			},
 			//点击弹框体验门店
@@ -199,6 +209,11 @@
 		overflow: auto;
 		-webkit-overflow-scrolling: touch;
 		background-color: #F7F7FF;
+	}
+
+	.lists .empty {
+		height: 100%;
+		width: 100%;
 	}
 
 	.list {
@@ -395,12 +410,12 @@
 	}
 
 	.modalBottom .content1 {
-		position:absolute;
+		position: absolute;
 		bottom: 0;
 		width: 100%;
 		background: #FFFFFF;
 		border-radius: 10px 10px 0 0;
-		padding-bottom:40rpx;
+		padding-bottom: 40rpx;
 
 	}
 
@@ -416,7 +431,7 @@
 		padding: 40rpx;
 		display: flex;
 		align-items: center;
-		font-size:40rpx
+		font-size: 40rpx
 	}
 
 	.close1 {

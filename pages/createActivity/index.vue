@@ -30,6 +30,23 @@
 		</view>
 		-->
 				<view class="item">
+					<text>优惠券</text>
+					<radio-group @change="changeShowCard" style="display: flex; align-items: center;">
+						<label style="display: flex;align-items:center;font-size:32rpx;margin-right:30rpx">
+							<view>
+								<radio :value="1" color="#5F90F8" :checked="showCard==1" />
+							</view>
+							<view>显示</view>
+						</label>
+						<label style="display: flex;align-items:center;font-size:32rpx">
+							<view>
+								<radio :value="0" color="#5F90F8" :checked="showCard==0" />
+							</view>
+							<view>不显示</view>
+						</label>
+					</radio-group>
+				</view>
+				<view class="item" v-if="showCard">
 					<view class="label">
 						<text class="tipIcon">*</text>
 						<text>券名称</text>
@@ -38,7 +55,7 @@
 						<input class="right input" type="text" v-model="form.card_name" placeholder="抖音活动页面展示">
 					</view>
 				</view>
-				<view class="item">
+				<view class="item" v-if="showCard">
 					<view class="label">
 						<text class="tipIcon">*</text>
 						<text>有效期截止时间</text>
@@ -54,7 +71,7 @@
 						<text class="iconfont icon-youjiantou"></text>
 					</view>
 				</view>
-				<view class="item">
+				<view class="item" v-if="showCard">
 					<view class="label">
 						<text class="tipIcon">*</text>
 						<text>单人领取上限</text>
@@ -67,7 +84,7 @@
 						<text class="iconfont icon-youjiantou"></text>
 					</view>
 				</view>
-				<view class="item">
+				<!-- <view class="item">
 					<view class="label">
 						<text class="tipIcon">*</text>
 						<text>单条视频转发上限</text>
@@ -79,7 +96,7 @@
 						</picker>
 						<text class="iconfont icon-youjiantou"></text>
 					</view>
-				</view>
+				</view> -->
 				<view class="videos">
 					<view class="item">
 						<view>
@@ -192,11 +209,12 @@
 				sid: '',
 				isTY: '',
 				actid: '',
+				showCard: 1,
 				// '不限领取',
 				lingquRang: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
 				lingquInd: 0,
-				shareRang: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
-				shareInd: 0,
+				// shareRang: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+				// shareInd: 0,
 				logInfo: {
 					openid: '',
 					userid: '',
@@ -207,7 +225,7 @@
 					card_name: '',
 					last_time: '',
 					lingqu_num: 1,
-					share_num: 1,
+					// share_num: 1,
 					poi_status: 1,
 					poi_address: '',
 					poi_id: '',
@@ -231,12 +249,17 @@
 			}
 			if (options.item) {
 				let item = JSON.parse(options.item);
+				if (item.act_name) {
+					this.showCard = 1;
+				} else {
+					this.showCard = 0;
+				}
 				let form = {
 					act_name: item.act_name,
 					card_name: item.card_name,
 					last_time: item.last_time,
 					lingqu_num: item.lingqu_num,
-					share_num: item.share_num,
+					// share_num: item.share_num,
 					poi_status: item.poi_status,
 					poi_address: item.poi_address,
 					poi_id: item.poi_id,
@@ -245,10 +268,10 @@
 					mv100: [item.mv100],
 				}
 				this.lingquInd = this.lingquRang.indexOf(item.lingqu_num * 1);
-				this.shareInd = this.shareRang.indexOf(item.share_num * 1);
-				if (this.shareInd == -1) {
-					this.shareInd = 0
-				}
+				// this.shareInd = this.shareRang.indexOf(item.share_num * 1);
+				// if (this.shareInd == -1) {
+				// 	this.shareInd = 0
+				// }
 				let keys = Object.keys(item);
 				let nums = []
 				keys.forEach(v => {
@@ -420,6 +443,11 @@
 			radioChange(e) {
 				this.form.poi_status = e.detail.value;
 			},
+			//是否显示优惠券
+			changeShowCard(e) {
+				this.showCard = e.detail.value;
+			}
+
 			//跳转到poi地址
 			toGD() {
 				uni.navigateTo({
@@ -442,7 +470,7 @@
 					card_name,
 					last_time,
 					lingqu_num,
-					share_num,
+					// share_num,
 					videos,
 					poi_status,
 					poi_address,
@@ -453,11 +481,13 @@
 				} = this.form;
 				if (act_name == "") {
 					toast("请输入活动名称")
-				} else if (card_name == "") {
+				} else if (card_name == ""&&this.showCard) {
 					toast("请输入券名称")
-				} else if (last_time == "") {
+				} else if (last_time == ""&&this.showCard) {
 					toast("请选择截止时间")
-				} else if (this.isEmpty(videos) && mv100[0] == '') {
+				} else if (lingqu_num== ""&&this.showCard) {
+					toast("请选择单人领取上限")
+				}else if (this.isEmpty(videos) && mv100[0] == '') {
 					toast('请上传视频')
 				} else {
 					let data = {};
@@ -478,10 +508,10 @@
 					data.mv = mvStr;
 					data.mv100 = mv100[0] ? mv100[0].slice(mv100[0].lastIndexOf('/') + 1).split('.')[0] : '';
 					data.act_name = act_name;
-					data.card_name = card_name;
-					data.last_time = last_time;
-					data.lingqu_num = lingqu_num;
-					data.share_num = share_num;
+					data.card_name = this.shwoCard?card_name:'';
+					data.last_time = this.shwoCard?last_time:'';
+					data.lingqu_num =this.shwoCard? lingqu_num:'';
+					// data.share_num = share_num;
 					data.poi_status = poi_status;
 					data.poi_address = poi_address;
 					data.poi_id = poi_id;

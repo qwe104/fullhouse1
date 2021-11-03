@@ -12,6 +12,7 @@
 			token: '',
 			userid: '',
 			money:0,
+			bgurl:''
 		},
 		onLaunch: function() {
 			console.log('App Launch')
@@ -28,6 +29,7 @@
 							this.globalData.token = res1.token;
 							this.globalData.userid = res1.userid;
 							this.globalData.money = res1.money;
+							this.globalData.bgurl = res1.bgurl;
 							this.$isResolve()
 						} else {
 							toast(res1.msg)
