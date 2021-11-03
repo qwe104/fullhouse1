@@ -94,7 +94,7 @@
 					actid: this.actid
 				}).then((res) => {
 					if (res.code == 200) {
-						this.info = res.data
+						this.info = res
 					} else {
 						toast(res.msg)
 					}
