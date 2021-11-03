@@ -276,7 +276,7 @@
 		padding: 30rpx;
 		box-sizing: border-box;
 		justify-content: space-between;
-		background-color: #F7F7FF;
+		background-color: #F3F3FB;
 	}
 
 	.footer view {
