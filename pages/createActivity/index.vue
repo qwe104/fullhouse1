@@ -46,7 +46,7 @@
 						</label>
 					</radio-group>
 				</view>
-				<view class="item" v-if="showCard">
+				<view class="item" v-if="showCard==1">
 					<view class="label">
 						<text class="tipIcon">*</text>
 						<text>券名称</text>
@@ -55,7 +55,7 @@
 						<input class="right input" type="text" v-model="form.card_name" placeholder="抖音活动页面展示">
 					</view>
 				</view>
-				<view class="item" v-if="showCard">
+				<view class="item" v-if="showCard==1">
 					<view class="label">
 						<text class="tipIcon">*</text>
 						<text>有效期截止时间</text>
@@ -71,7 +71,7 @@
 						<text class="iconfont icon-youjiantou"></text>
 					</view>
 				</view>
-				<view class="item" v-if="showCard">
+				<view class="item" v-if="showCard==1">
 					<view class="label">
 						<text class="tipIcon">*</text>
 						<text>单人领取上限</text>
@@ -446,7 +446,7 @@
 			//是否显示优惠券
 			changeShowCard(e) {
 				this.showCard = e.detail.value;
-			}
+			},
 
 			//跳转到poi地址
 			toGD() {

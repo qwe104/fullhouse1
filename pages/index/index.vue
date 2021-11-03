@@ -1,7 +1,7 @@
 <template>
 	<view class="home">
 		<view class="lists">
-			<template v-for="(item,index) in lists" >
+			<template v-for="(item,index) in lists">
 				<view class="list" @click="ckList(item)" v-if="lists.length>0" :key="index">
 					<image class="img" :src="item.logo"></image>
 					<view class="info">
@@ -10,10 +10,11 @@
 					</view>
 				</view>
 			</template>
+			<image :src="bgurl" mode="aspectFit" class="bgImg"></image>
 
-			<view class="empty" v-if="lists.length==0">
+			<!-- <view class="empty" v-if="lists.length==0">
 				<image :src="bgurl" style="width:100%;height:100%"></image>
-			</view>
+			</view> -->
 		</view>
 		<view class="footer">
 			<view class="toMore" @click="toMore">更多功能</view>
@@ -46,18 +47,18 @@
 			</view>
 		</view>
 		<view class="modal modalBottom" v-if="showBottom">
-			<view class="mask"></view>
+			<view class="mask" @click="hideModal"></view>
 			<view class="content1">
 				<view class="hd1">更多功能</view>
 				<view class="bd1">
 					<view class="bd_item" @click="toBill">
 						<text class="iconfont icon-zhoubianhuodongtiyandianxinxi"
-							style="margin-right:30rpx;font-size:40rpx;color:#23BF7A"></text>
+							style="margin-right:30rpx;font-size:50rpx;color:#23BF7A"></text>
 						<text>我的订单</text>
 					</view>
 					<view class="bd_item" @click="tymd">
 						<text class="iconfont icon-my_bill"
-							style="margin-right:30rpx;font-size:40rpx;color:rgb(255, 145, 40)"></text>
+							style="margin-right:30rpx;font-size:50rpx;color:rgb(255, 145, 40)"></text>
 						<text>体验门店</text>
 					</view>
 				</view>
@@ -90,7 +91,6 @@
 			}
 		},
 		onLoad() {
-			this.bgurl = getApp().globalData.bgurl;
 			this.getLists()
 		},
 		methods: {
@@ -99,8 +99,10 @@
 				let {
 					userid,
 					openid,
-					token
+					token,
+					bgurl
 				} = getApp().globalData;
+				this.bgurl = bgurl
 				request('get_store_list.php', {
 					userid,
 					openid,
@@ -182,6 +184,7 @@
 			},
 			//点击我的订单
 			toBill() {
+				this.showBottom = false;
 				uni.navigateTo({
 					url: '/pages/myBill/index'
 				})
@@ -208,7 +211,17 @@
 		box-sizing: border-box;
 		overflow: auto;
 		-webkit-overflow-scrolling: touch;
-		background-color: #F7F7FF;
+		background-color: #F3F3FB;
+		position: relative;
+	}
+
+	.lists .bgImg {
+		position: absolute;
+		height: 100%;
+		width: 100%;
+		top: 0;
+		left: 0;
+		z-index: 0;
 	}
 
 	.lists .empty {
@@ -222,10 +235,13 @@
 		justify-content: space-between;
 		background-color: #fff;
 		border-radius: 5px;
+		position: relative;
+		z-index: 11;
 	}
 
 	.list+.list {
 		margin-top: 10px;
+
 	}
 
 	.list .img {
@@ -269,17 +285,19 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		color: #fff;
 		font-size: 32rpx;
 		border-radius: 5px;
 	}
 
 	.toMore {
-		background-color: #426FE7;
+		background-color: #fff;
+		color: #577BE7;
+		border: 1px solid #577BE7;
 	}
 
 	.addStore {
-		background-color: #52B752;
+		background-color: #2754E1;
+		color: #fff;
 	}
 
 	.modal {
