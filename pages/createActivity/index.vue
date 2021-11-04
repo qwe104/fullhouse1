@@ -238,6 +238,11 @@
 					mv100: [''],
 				},
 				hasVideo: false,
+				OldCardInfo: {
+					card_name: '',
+					lingqu_num: 1,
+					last_time: '',
+				}
 			}
 		},
 		onLoad(options) {
@@ -448,6 +453,20 @@
 			},
 			//是否显示优惠券
 			changeShowCard(e) {
+				let value = e.detail.value;
+				if (value == 0) {
+					let cardInfo = JSON.parse(JSON.stringify(this.form));
+					this.OldCardInfo.card_name = cardInfo.card_name;
+					this.OldCardInfo.last_time = cardInfo.last_time;
+					this.OldCardInfo.lingqu_num = cardInfo.lingqu_num;
+					this.form.card_name = '';
+					this.form.last_time = '';
+					this.form.lingqu_num = '';
+				} else {
+					this.form.card_name = this.OldCardInfo.card_name;
+					this.form.last_time = this.OldCardInfo.last_time;
+					this.form.lingqu_num = this.OldCardInfo.lingqu_num;
+				}
 				this.showCard = e.detail.value;
 			},
 
