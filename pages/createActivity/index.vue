@@ -516,9 +516,9 @@
 					data.mv = mvStr;
 					data.mv100 = mv100[0] ? mv100[0].slice(mv100[0].lastIndexOf('/') + 1).split('.')[0] : '';
 					data.act_name = act_name;
-					data.card_name = this.shwoCard ? card_name : '';
-					data.last_time = this.shwoCard ? last_time : '';
-					data.lingqu_num = this.shwoCard ? lingqu_num : '';
+					data.card_name = this.showCard ? card_name : '';
+					data.last_time = this.showCard ? last_time : '';
+					data.lingqu_num = this.showCard ? lingqu_num : '';
 					// data.share_num = share_num;
 					data.poi_status = poi_status;
 					data.poi_address = poi_address;
