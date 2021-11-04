@@ -55,12 +55,12 @@
 			return {
 				lists: [],
 				sid: '',
-				isTY:'',
+				isTY: '',
 			}
 		},
 		onLoad(options) {
 			this.sid = options.sid;
-			this.isTY=options.isTY||''
+			this.isTY = options.isTY || ''
 			// this.getLists();
 		},
 		onShow() {
@@ -162,7 +162,7 @@
 			edit(item) {
 				uni.navigateTo({
 					url: '/pages/createActivity/index?actid=' + item.id + '&sid=' + this.sid + '&item=' + JSON
-						.stringify(item)+"&isTY="+this.isTY
+						.stringify(item) + "&isTY=" + this.isTY
 				})
 			},
 			//删除活动
@@ -182,7 +182,7 @@
 								userid,
 								openid,
 								token,
-								sid:that.sid,
+								sid: that.sid,
 								actid: item.id
 							}).then((res) => {
 								toast(res.msg)
@@ -228,7 +228,7 @@
 	}
 
 	.top .name {
-		font-size: 40rpx;
+		font-size: 35rpx;
 		font-weight: 600;
 		margin-bottom: 15rpx;
 	}
@@ -239,12 +239,18 @@
 	}
 
 	.list .toDetail {
-		padding: 8rpx 15rpx;
+		flex:0 0 180rpx;
+		padding: 8rpx 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		border: 1px solid #D6D5D9;
 		border-radius: 35rpx;
 		font-size: 24rpx;
 		color: #9BB7E1;
 		background-color: #F2F9FF;
+		margin-left:5px;
+		white-space: nowrap
 	}
 
 	.list .middle {
