@@ -481,14 +481,19 @@
 				} = this.form;
 				if (act_name == "") {
 					toast("请输入活动名称")
-				} else if (card_name == ""&&this.showCard) {
+					return;
+				} else if (card_name == ""&&this.showCard==1) {
 					toast("请输入券名称")
-				} else if (last_time == ""&&this.showCard) {
+					return;
+				} else if (last_time == ""&&this.showCard==1) {
 					toast("请选择截止时间")
-				} else if (lingqu_num== ""&&this.showCard) {
+					return;
+				} else if (lingqu_num== ""&&this.showCard==1) {
 					toast("请选择单人领取上限")
+					return;
 				}else if (this.isEmpty(videos) && mv100[0] == '') {
 					toast('请上传视频')
+					return;
 				} else {
 					let data = {};
 					let mv = [];
