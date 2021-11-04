@@ -66,9 +66,9 @@
 							@change="bindChange">
 							<view class="pickerInput" :class="{select:!form.last_time}">
 								{{form.last_time? form.last_time:'请选择'}}
+								<text class="iconfont icon-youjiantou"></text>
 							</view>
 						</picker>
-						<text class="iconfont icon-youjiantou"></text>
 					</view>
 				</view>
 				<view class="item" v-if="showCard==1">
@@ -79,9 +79,9 @@
 					<view class="right_picker">
 						<picker mode="selector" style="flex:1;text-align: right;" :value="lingquInd" :range="lingquRang"
 							@change="bindChange1">
-							<view class="pickerInput">{{lingquRang[lingquInd]}}</view>
+							<view class="pickerInput">{{lingquRang[lingquInd]}}<text
+									class="iconfont icon-youjiantou"></text></view>
 						</picker>
-						<text class="iconfont icon-youjiantou"></text>
 					</view>
 				</view>
 				<!-- <view class="item">
@@ -249,7 +249,7 @@
 			}
 			if (options.item) {
 				let item = JSON.parse(options.item);
-				if (item.act_name) {
+				if (item.card_name) {
 					this.showCard = 1;
 				} else {
 					this.showCard = 0;
@@ -268,6 +268,9 @@
 					mv100: [item.mv100],
 				}
 				this.lingquInd = this.lingquRang.indexOf(item.lingqu_num * 1);
+				if (this.lingquInd == -1) {
+					this.lingquInd = 0;
+				}
 				// this.shareInd = this.shareRang.indexOf(item.share_num * 1);
 				// if (this.shareInd == -1) {
 				// 	this.shareInd = 0
@@ -482,16 +485,16 @@
 				if (act_name == "") {
 					toast("请输入活动名称")
 					return;
-				} else if (card_name == ""&&this.showCard==1) {
+				} else if (card_name == "" && this.showCard == 1) {
 					toast("请输入券名称")
 					return;
-				} else if (last_time == ""&&this.showCard==1) {
+				} else if (last_time == "" && this.showCard == 1) {
 					toast("请选择截止时间")
 					return;
-				} else if (lingqu_num== ""&&this.showCard==1) {
+				} else if (lingqu_num == "" && this.showCard == 1) {
 					toast("请选择单人领取上限")
 					return;
-				}else if (this.isEmpty(videos) && mv100[0] == '') {
+				} else if (this.isEmpty(videos) && mv100[0] == '') {
 					toast('请上传视频')
 					return;
 				} else {
@@ -513,9 +516,9 @@
 					data.mv = mvStr;
 					data.mv100 = mv100[0] ? mv100[0].slice(mv100[0].lastIndexOf('/') + 1).split('.')[0] : '';
 					data.act_name = act_name;
-					data.card_name = this.shwoCard?card_name:'';
-					data.last_time = this.shwoCard?last_time:'';
-					data.lingqu_num =this.shwoCard? lingqu_num:'';
+					data.card_name = this.shwoCard ? card_name : '';
+					data.last_time = this.shwoCard ? last_time : '';
+					data.lingqu_num = this.shwoCard ? lingqu_num : '';
 					// data.share_num = share_num;
 					data.poi_status = poi_status;
 					data.poi_address = poi_address;
