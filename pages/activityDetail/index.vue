@@ -30,7 +30,7 @@
 				</template>
 				<view class="empty" v-if="info.data.length==0">暂无数据</view>
 			</view>
-			<view class="paylists" v-if="!isFB">
+			<view class="payLists" v-if="!isFB">
 				<view class="listTit">
 					<view>视频ID</view>
 					<view>点赞数</view>
@@ -40,18 +40,22 @@
 				<view class="pays">
 					<template v-for="(item,index) in modalInfo.data">
 						<view>
-							<view class="paylist" :key='index' v-if="info.data.length>0">
+							<view class="paylist" :key='index' @click="showList(item)">
 								<view>{{item.name}}</view>
 								<view>{{item.dianzan_nums}}</view>
 								<view>{{item.show_nums}}</view>
-								<view></view>
+								<view>
+									<text class="iconfont icon-youjiantou"
+										:class="{'icon-xiala':item.show,'':!item.show}"
+										:style="{transform:(item.show?'rotate(90deg)':'rotate(0)')}"></text>
+								</view>
 							</view>
-							<template v-for="(item,index) in item.data">
-								<view :key="index" class="childList" v-if="item.show">
+							<template v-for="(item1,index1) in item.data">
+								<view :key="index1" class="childList" v-if="item.show">
 									<view></view>
-									<view>{{item.dianzan_nums}}</view>
-									<view>{{item.show_nums}}</view>
-									<view>{{item.days}}</view>
+									<view>{{item1.dianzan_nums}}</view>
+									<view>{{item1.show_nums}}</view>
+									<view>{{item1.days}}</view>
 								</view>
 							</template>
 						</view>
@@ -170,6 +174,9 @@
 			hideModal() {
 				this.show = false
 			},
+			showList(item) {
+				item.show = !item.show;
+			},
 			//付款查看
 			toPay() {
 				this.show = false;
@@ -281,7 +288,7 @@
 	.payLists {
 		height: calc(100vh - 366rpx);
 		background: #fff;
-		font-size: 24rpx;
+		font-size: 28rpx;
 	}
 
 	.payLists .listTit {
@@ -291,6 +298,13 @@
 		font-size: 32rpx;
 	}
 
+	.childList {
+		display: flex;
+		height: 80rpx;
+		display: flex;
+		background-color: rgba(221, 221, 221, .2);
+	}
+
 	.listTit>view,
 	.paylist>view,
 	.childList>view {
@@ -298,6 +312,11 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+
+	.icon-youjiantou {
+		font-size: 40rpx;
+		color: #ddd
 	}
 
 	.payLists .pays {
@@ -333,7 +352,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		color: #DDDDDD;
+		color: #666;
 		font-size: 32rpx;
 	}
 
