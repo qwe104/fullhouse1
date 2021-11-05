@@ -4,7 +4,7 @@
 		<view class="infos">
 			<view class="top">
 				<view class="nums">
-					<view class="num">
+					<view class="num" @click="getDetail">
 						<view class="value">{{info.send_num?info.send_num:'--'}}</view>
 						<view class="tip">发布次数</view>
 					</view>
@@ -19,7 +19,7 @@
 				</view>
 				<view @click="toLook" class="look">查看点赞和浏览的详细数据</view>
 			</view>
-			<view class="lists">
+			<view class="lists" v-if="isFB">
 				<template v-for="(item,index) in info.data">
 					<view class="list" :key='index' v-if="info.data.length>0">
 						<view class="nick">
@@ -30,6 +30,35 @@
 				</template>
 				<view class="empty" v-if="info.data.length==0">暂无数据</view>
 			</view>
+			<view class="paylists" v-if="!isFB">
+				<view class="listTit">
+					<view>视频ID</view>
+					<view>点赞数</view>
+					<view>浏览量</view>
+					<view>日期</view>
+				</view>
+				<view class="pays">
+					<template v-for="(item,index) in modalInfo.data">
+						<view>
+							<view class="paylist" :key='index' v-if="info.data.length>0">
+								<view>{{item.name}}</view>
+								<view>{{item.dianzan_nums}}</view>
+								<view>{{item.show_nums}}</view>
+								<view></view>
+							</view>
+							<template v-for="(item,index) in item.data">
+								<view :key="index" class="childList" v-if="item.show">
+									<view></view>
+									<view>{{item.dianzan_nums}}</view>
+									<view>{{item.show_nums}}</view>
+									<view>{{item.days}}</view>
+								</view>
+							</template>
+						</view>
+					</template>
+					<view class="empty" v-if="modalInfo.data.length==0">暂无数据</view>
+				</view>
+			</view>
 		</view>
 		<view class="modal" v-if="show">
 			<view class="mask"></view>
@@ -37,11 +66,12 @@
 				<view class="hd">温馨提示</view>
 				<view class="bd">
 					<view class="tip">
-						尊敬的用户，根据抖音接口付费政策，每查询一次点赞量/浏览量，需向抖音支付<text class="red">0.005元</text>的查询费用。
+						尊敬的用户，根据抖音接口付费政策，每查询一次点赞量/浏览量，需向抖音支付<text class="red">{{modalInfo.one_money}}元</text>的查询费用。
 					</view>
 					<view class="tip">
-						截止<text class="red">24小时前</text>，您的探店码活动待查询数据<text class="red">共2条</text>，如需查询详细数据，需支付<text
-							class="red">0.01元</text>查询费用,请您知晓。
+						截止<text class="red">24小时前</text>，您的探店码活动待查询数据<text
+							class="red">共{{modalInfo.all_num}}条</text>，如需查询详细数据，需支付<text
+							class="red">{{modalInfo.all_money}}元</text>查询费用,请您知晓。
 					</view>
 				</view>
 				<view class="fd">
@@ -72,16 +102,23 @@
 					show_num: 0,
 					data: []
 				},
-				actid: ''
+				isFB: true,
+				actid: '',
+				sid: '',
+				modalInfo: {
+
+				}
 			}
 		},
 
 		onLoad(options) {
 			this.actid = options.actid;
+			this.sid = options.sid;
 			this.getDetail();
 		},
 		methods: {
 			getDetail() {
+				this.isFB = true;
 				let {
 					userid,
 					openid,
@@ -101,11 +138,76 @@
 				})
 			},
 			toLook() {
-				this.show = true
+				this.isFB = false;
+				let {
+					userid,
+					openid,
+					token
+				} = getApp().globalData;
+				request('get_activity_data_info.php', {
+					userid,
+					openid,
+					token,
+					actid: this.actid
+				}).then((res) => {
+					if (res.code == 200) {
+						if (res.id_pay == 1) {
+							this.show = true;
+						}
+						res.data.forEach((v, i) => {
+							if (i == 0) {
+								v.show = true;
+							} else {
+								v.show = false
+							}
+						})
+						this.modalInfo = res
+					} else {
+						toast(res.msg)
+					}
+				})
 			},
 			hideModal() {
 				this.show = false
-			}
+			},
+			//付款查看
+			toPay() {
+				this.show = false;
+				var that = this;
+				let {
+					userid,
+					token,
+					openid,
+					appid
+				} = getApp().globalData;
+				request('active_pay.php', {
+					appid,
+					userid,
+					token,
+					openid,
+					actid: that.actid,
+					sid: that.sid,
+					all_money: that.modalInfo.all_money
+				}).then(res => {
+					if (res.code == 200) {
+						wx.requestPayment({
+							"timeStamp": res.prepay_info.timeStamp,
+							"nonceStr": res.prepay_info.nonceStr,
+							"package": res.prepay_info.package,
+							"signType": res.prepay_info.signType,
+							"paySign": res.prepay_info.paySign,
+							"success": function(res) {
+								that.toLook()()
+							},
+							"fail": function(res) {},
+							"complete": function(res) {}
+						})
+					} else {
+						toast(res.msg)
+					}
+				})
+			},
+
 
 		}
 	}
@@ -174,7 +276,39 @@
 		height: calc(100vh - 366rpx);
 		overflow: auto;
 		background-color: #fff;
+	}
 
+	.payLists {
+		height: calc(100vh - 366rpx);
+		background: #fff;
+		font-size: 24rpx;
+	}
+
+	.payLists .listTit {
+		display: flex;
+		height: 100rpx;
+		display: flex;
+		font-size: 32rpx;
+	}
+
+	.listTit>view,
+	.paylist>view,
+	.childList>view {
+		flex: 1;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.payLists .pays {
+		height: calc(100% - 100rpx);
+		overflow: auto;
+	}
+
+	.payLists .paylist {
+		display: flex;
+		height: 100rpx;
+		align-items: center;
 	}
 
 	.lists .list {

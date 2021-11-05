@@ -199,7 +199,7 @@
 			//跳转到数据详情
 			toDetail(item) {
 				uni.navigateTo({
-					url: '/pages/activityDetail/index?actid=' + item.id
+					url: '/pages/activityDetail/index?actid=' + item.id+'&sid=' + this.sid 
 				})
 			}
 		},
