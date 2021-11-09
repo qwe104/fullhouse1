@@ -540,8 +540,8 @@
 					data.lingqu_num = this.showCard ? lingqu_num : '';
 					// data.share_num = share_num;
 					data.poi_status = poi_status;
-					data.poi_address = poi_address;
-					data.poi_id = poi_id;
+					data.poi_address = poi_status == 1 ? poi_address : '';
+					data.poi_id = poi_status == 1 ? poi_id : '';
 					data.mv_title = mv_title;
 					data.active_desribe = active_desribe;
 					data.openid = openid;
