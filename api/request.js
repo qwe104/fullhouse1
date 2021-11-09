@@ -1,6 +1,7 @@
 import {
 	toast,
-	loading
+	loading,
+	Modal
 } from '@/util/util.js'
 let baseUrl="https://dc.bilalipay.com/douyin/web/";
 //封装请求
@@ -20,7 +21,7 @@ function request(url, data, method, noLoad) {
 			// responseType: 'text',
 			success: (res) => {
 				if (/^5/.test(res.statusCode)) {
-					toast('服务器忙，请重试');
+					Modal('服务器忙，请重试',false);
 				}
 				if (!noLoad) {
 					uni.hideLoading({
